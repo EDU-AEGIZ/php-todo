@@ -17,13 +17,13 @@ pipeline {
       }
     }
 
-    stage('Execute Unit Tests') {
+    stage('Prepare Dependencies') {
       steps {
-             sh './vendor/bin/phpunit'
-            //  sh 'composer install'
-            //  sh 'php artisan migrate'
-            //  sh 'php artisan db:seed'
-            //  sh 'php artisan key:generate'
+             sh 'mv .env.sample .env'
+             sh 'composer install'
+             sh 'php artisan migrate'
+             sh 'php artisan db:seed'
+             sh 'php artisan key:generate'
       }
     }
   }
