@@ -16,14 +16,10 @@ pipeline {
             git branch: 'main', url: 'https://github.com/EDU-AEGIZ/php-todo.git'
       }
     }
-
-    stage('Prepare Dependencies') {
+     stage('Execute Unit Tests') {
       steps {
-             sh 'mv .env.sample .env'
-             sh 'composer install'
-             sh 'php artisan migrate'
-             sh 'php artisan db:seed'
-             sh 'php artisan key:generate'
+             sh './vendor/bin/phpunit'
+      } 
       }
     }
   }
