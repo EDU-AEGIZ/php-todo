@@ -32,7 +32,7 @@ pipeline {
       }
     }
     stage('Code Analysis') {
-      steps {
+      steps{
         sh 'phploc app/ --log-csv build/logs/phploc.csv'
         }
     }
@@ -53,5 +53,30 @@ pipeline {
 
       }
     }
+    stage ('Package Artifact') {
+    steps {
+            sh 'zip -qr php-todo.zip ${WORKSPACE}/*'
+     }
+    }
+    stage ('Upload Artifact to Artifactory') {
+          steps {
+            script { 
+                 def server = Artifactory.server 'artifactory-server'                 
+                 def uploadSpec = """{
+                    "files": [
+                      {
+                       "pattern": "php-todo.zip",
+                       "target": "PBL/php-todo",
+                       "props": "type=zip;status=ready"
+
+                       }
+                    ]
+                 }""" 
+
+                 server.upload spec: uploadSpec
+               }
+            }
+
+        }
   }
  }
